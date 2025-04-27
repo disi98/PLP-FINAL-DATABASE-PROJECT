@@ -2,65 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>FastAPI Items CRUD</title>
+  <title>Blog CMS Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Items</h1>
-  <ul id="items-list"></ul>
+  <h1>Blog CMS Dashboard</h1>
+  <div class="nav">
+    <button id="btn-hashtags">Latest Hashtags</button>
+    <button id="btn-posts">Latest Posts</button>
+    <button id="btn-authors">Latest Authors</button>
+  </div>
 
-  <h2>Add New Item</h2>
-  <form id="create-form">
-    <input name="name" placeholder="Name" required />
-    <input name="description" placeholder="Description" />
-    <button type="submit">Create</button>
-  </form>
+  <ul id="data-list"></ul>
 
   <script>
-    const apiUrl = 'http://127.0.0.1:8000/items';
+    const apiBase = 'http://127.0.0.1:8000';
 
-    // Fetch and display all items
-    async function loadItems() {
-      const res = await fetch(`${apiUrl}/`);
+    async function loadHashtags() {
+      const res = await fetch(`${apiBase}/hashtags/latest`);
       const items = await res.json();
-      const ul = document.getElementById('items-list');
+      renderList(items.map(i => i.name));
+    }
+
+    async function loadPosts() {
+      const res = await fetch(`${apiBase}/posts/latest`);
+      const items = await res.json();
+      renderList(items.map(i => i.title));
+    }
+
+    async function loadAuthors() {
+      const res = await fetch(`${apiBase}/authors/latest`);
+      const items = await res.json();
+      renderList(items.map(i => i.username));
+    }
+
+    function renderList(arr) {
+      const ul = document.getElementById('data-list');
       ul.innerHTML = '';
-      items.forEach(i => {
+      arr.forEach(text => {
         const li = document.createElement('li');
-        li.textContent = `#${i.id} - ${i.name}: ${i.description || '(no desc)'}`;
-        // Add delete button
-        const delBtn = document.createElement('button');
-        delBtn.textContent = 'Delete';
-        delBtn.onclick = () => deleteItem(i.id);
-        li.appendChild(delBtn);
+        li.textContent = text;
         ul.appendChild(li);
       });
     }
 
-    // Create new item
-    document.getElementById('create-form').onsubmit = async e => {
-      e.preventDefault();
-      const form = e.target;
-      const data = {
-        name: form.name.value,
-        description: form.description.value
-      };
-      await fetch(`${apiUrl}/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      form.reset();
-      loadItems();
-    };
-
-    // Delete item
-    async function deleteItem(id) {
-      await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
-      loadItems();
-    }
-
-    // Initialize
-    loadItems();
+    document.getElementById('btn-hashtags').onclick = loadHashtags;
+    document.getElementById('btn-posts').onclick = loadPosts;
+    document.getElementById('btn-authors').onclick = loadAuthors;
   </script>
 </body>
 </html>

@@ -1,0 +1,46 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+.nav {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.nav button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.nav button:hover {
+  background: #0056b3;
+}
+
+#data-list {
+  list-style: none;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+#data-list li {
+  background: white;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
