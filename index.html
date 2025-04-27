@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FastAPI Items CRUD</title>
+</head>
+<body>
+  <h1>Items</h1>
+  <ul id="items-list"></ul>
+
+  <h2>Add New Item</h2>
+  <form id="create-form">
+    <input name="name" placeholder="Name" required />
+    <input name="description" placeholder="Description" />
+    <button type="submit">Create</button>
+  </form>
+
+  <script>
+    const apiUrl = 'http://127.0.0.1:8000/items';
+
+    // Fetch and display all items
+    async function loadItems() {
+      const res = await fetch(`${apiUrl}/`);
+      const items = await res.json();
+      const ul = document.getElementById('items-list');
+      ul.innerHTML = '';
+      items.forEach(i => {
+        const li = document.createElement('li');
+        li.textContent = `#${i.id} - ${i.name}: ${i.description || '(no desc)'}`;
+        // Add delete button
+        const delBtn = document.createElement('button');
+        delBtn.textContent = 'Delete';
+        delBtn.onclick = () => deleteItem(i.id);
+        li.appendChild(delBtn);
+        ul.appendChild(li);
+      });
+    }
+
+    // Create new item
+    document.getElementById('create-form').onsubmit = async e => {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        name: form.name.value,
+        description: form.description.value
+      };
+      await fetch(`${apiUrl}/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      form.reset();
+      loadItems();
+    };
+
+    // Delete item
+    async function deleteItem(id) {
+      await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
+      loadItems();
+    }
+
+    // Initialize
+    loadItems();
+  </script>
+</body>
+</html>
