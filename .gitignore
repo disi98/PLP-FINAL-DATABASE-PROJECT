@@ -1,4 +1,4 @@
-venv
-sql_template.txt
-.gitignore
-__pycache__/
+./venv
+./sql_template.txt
+./.gitignore
+./__pycache__/
