@@ -1,1 +1,4 @@
 venv
+sql_template.txt
+.gitignore
+__pycache__/
